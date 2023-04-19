@@ -1,0 +1,4 @@
+*/node_modules
+
+git branch -M main
+git remote add origin https://github.com/Aarjupatel9/Massenger-web.git
