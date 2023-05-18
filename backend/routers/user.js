@@ -28,12 +28,6 @@ router.post("/newContactAddForUser", bodyParser.json(), async (req, res) => {
   if (findUser) {
     console.log("findUser is :", findUser);
 
-    // myArray: {
-    //   $elemMatch: {
-    //     myElement: searchValue;
-    //   }
-    // }
-
     dbo.collection("user_info").findOne(
       {
         _id: ObjectId(req.body.id),
@@ -59,14 +53,32 @@ router.post("/newContactAddForUser", bodyParser.json(), async (req, res) => {
             status: 1,
             data: null,
           };
+          dbo.collection("masseges").updateOne(
+            { _id: ObjectId(req.body.id) },
+            {
+              $push: {
+                Contacts: {
+                  _id: findUser._id,
+                  massegeHolder: [],
+                },
+              },
+            },
+            (err, result) => {
+              if (err) {
+                console.log("massegeHolder error array updarte : ", err);
+              } else {
+                console.log("massegeHolder array update result is : ", result);
+              }
+            }
+          );
 
           dbo.collection("user_info").updateOne(
             { _id: ObjectId(req.body.id) },
             {
               $push: {
                 ContactsEmails: {
-                  email: req.body.email,
                   _id: findUser._id,
+                  email: req.body.email,
                   name: req.body.name,
                 },
               },
@@ -77,7 +89,6 @@ router.post("/newContactAddForUser", bodyParser.json(), async (req, res) => {
               } else {
                 console.log("array update result is : ", result);
               }
-
               res.send(response);
             }
           );
@@ -119,19 +130,34 @@ router.post("/newContactAddForUser", bodyParser.json(), async (req, res) => {
 });
 
 router.post("/updateMyContacts", bodyParser.json(), async (req, res) => {
-  console.log("updateMyContacts || id: ", req.body.id);
+  console.log("updateMyContacts || id: ", req.body._id);
   const contact = await dbo
     .collection("user_info")
-    .findOne({ _id: ObjectId(req.body.id) });
+    .findOne({ _id: ObjectId(req.body._id) });
 
+  
   const response = {
     status: 1,
-    data: contact.ContactsEmails,
   };
 
+  if (contact == null) {
+    response["data"] = [];
+  } else {
+    response["data"] = contact.ContactsEmails;
+  }
+  
   console.log("ContactEmails : ", response);
 
   res.send(response);
 });
 
 module.exports = router;
+
+
+// { _id: ObjectId('6440d837f60588934b7c1447'), Contacts: { $elemMatch: { _id: ObjectId('6440da64a72c6878e94754f2'), massegeHolder : { $elemMatch: { _id: ObjectId('6440dfa8613c1e52168354c7') } } }
+
+//   { _id: ObjectId('6440d837f60588934b7c1447'), Contacts: { $elemMatch: { _id: ObjectId('6440da64a72c6878e94754f2') } } }
+
+//    { Contacts: { $elemMatch: { _id: ObjectId('6440da64a72c6878e94754f2'), massegeHolder: { $elemMatch: {  _id: ObjectId('6440dfa8613c1e52168354c7') } } } } },
+//     { 'Contacts.$': 1, 'Contacts.MessageList.$': 1 }, 
+    

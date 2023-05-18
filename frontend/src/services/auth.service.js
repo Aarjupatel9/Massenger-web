@@ -27,14 +27,15 @@ class AuthService {
             var userDetails = {
               username: res.data.username,
               token: res.token,
-              id: res.data.id,
+              _id: res.data._id,
               email: res.data.email,
               picture: res.data.picture,
               about: res.data.about,
             };
+            
             console.log("response in login arrive userDetails : ", userDetails);
             localStorage.setItem("user", JSON.stringify(userDetails));
-            resolve(userDetails);
+            resolve(userDetails, res.Contacts);
           } else {
             reject(res);
           }
@@ -55,7 +56,7 @@ class AuthService {
   }
   getCurrentUserId() {
     const currentUser = JSON.parse(localStorage.getItem("user"));
-    return currentUser.id;
+    return currentUser._id;
   }
   getUserToken() {
     const currentUser = JSON.parse(localStorage.getItem("user"));

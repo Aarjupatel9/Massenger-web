@@ -44,5 +44,14 @@ export const SetMySocketInstance = (Socket) => {
     });
   };
 };
+export const SetStoredEmitEvents = (Socket) => {
+  console.log("in SetStoredEmitEvents action-creaters");
+  return (dispatch) => {
+    dispatch({
+      type: "SetStoredEmitEvents",
+      payload: Socket,
+    });
+  };
+};
 
 

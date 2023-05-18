@@ -6,6 +6,7 @@ import {
   setMyContactsReducer,
   setCurrentUserReducer,
   setMySocketInstanceReducer,
+  setStoredEmitEventsReducer,
 } from "./reducers";
 
 const reducers = combineReducers({
@@ -13,6 +14,7 @@ const reducers = combineReducers({
   CurrentUser: setCurrentUserReducer,
   CurrentContact: setCurrentContactReducer,
   MyContacts: setMyContactsReducer,
-  MySocket : setMySocketInstanceReducer
+  MySocket: setMySocketInstanceReducer,
+  StoredEmitEvents  :setStoredEmitEventsReducer,
 });
 export default reducers;

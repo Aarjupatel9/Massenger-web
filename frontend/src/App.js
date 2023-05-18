@@ -18,11 +18,15 @@ import { actionCreators } from "./state/index";
 import { userDetailsTemplate } from "./templates/Templates";
 import { SocketServiceInit } from "./services/socket.service";
 
+import store from "./state/store";
+
 import io from "socket.io-client";
+import userService from "./services/user.service";
 
 function App() {
   const CurrentUser = useSelector((state) => state.CurrentUser);
   const MySocket = useSelector((state) => state.MySocket);
+  const MyContacts = useSelector((state) => state.MyContacts);
 
   const navigate = useNavigate();
   const dispach = useDispatch();
@@ -30,24 +34,19 @@ function App() {
   useEffect(() => {
     const localCurrentUser = AuthService.getCurrentUser();
     console.log("app.js useeffect localcurrentUser :", localCurrentUser);
+    
     if (localCurrentUser == null) {
-      console.log("app.js useeffect localcurrentUser enter if cond.");
+      // console.log("app.js useeffect localcurrentUser enter if cond.");
       navigate("/login");
       // window.location.reload();
     } else {
-      console.log("app.js useeffect localcurrentUser enter else cond.");
+      // console.log("app.js useeffect localcurrentUser enter else cond.");
       dispach(actionCreators.SetCurrentUser(localCurrentUser));
-      console.log(
-        "app.js useeffect localcurrentUser enter else cond. currentuser : ",
-        CurrentUser
-      );
+      // console.log(
+      //   "app.js useeffect localcurrentUser enter else cond. currentuser : ",
+      //   CurrentUser
+      // );
       navigate("/home");
-    }
-
-    const socket = SocketServiceInit();
-
-    if (socket != -1) {
-      dispach(actionCreators.SetMySocketInstance(socket));
     }
   }, []);
 
@@ -58,9 +57,9 @@ function App() {
     window.location.reload();
   }
 
-  function displayFunction() {
-    console.log("app.js DF currentUser : ", CurrentUser);
-  }
+  // function displayFunction() {
+  //   console.log("app.js DF currentUser : ", CurrentUser);
+  // }
   return (
     <>
       <div className="MainPage">
@@ -68,7 +67,7 @@ function App() {
           <Link to={"/home"} className="navbar-brand">
             Massenger
           </Link>
-          {displayFunction()}
+          {/* {displayFunction()} */}
           {CurrentUser != userDetailsTemplate ? (
             <div className="navbar-nav ml-auto">
               <li className="nav-item">
@@ -77,14 +76,14 @@ function App() {
                 </Link>
               </li>
               <li className="nav-item ">
-                <a
-                  className="nav-link"
+                <div
+                  className="nav-link btn"
                   onClick={() => {
                     localLogOut();
                   }}
                 >
                   LogOut
-                </a>
+                </div>
               </li>
             </div>
           ) : (

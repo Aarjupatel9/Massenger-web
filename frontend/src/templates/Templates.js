@@ -1,7 +1,7 @@
 export const userDetailsTemplate = {
   username: "",
   token: "",
-  id: "",
+  _id: "",
   email: "",
   about: "",
 };

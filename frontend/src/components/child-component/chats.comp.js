@@ -4,6 +4,8 @@ export default function Chats() {
   const [typedMassege, setTypedMassege] = useState("");
 
   const MySocket = useSelector((state) => state.MySocket);
+  const CurrentUser = useSelector((state) => state.CurrentUser);
+  const CurrentContact = useSelector((state) => state.CurrentContact);
 
   const ContactMasseges = [
     {
@@ -25,7 +27,17 @@ export default function Chats() {
   function SendMassege(e) {
     console.log("sending massege : ", typedMassege);
 
-    MySocket.emit("massege", typedMassege);
+    var massegeObj = {
+      from: CurrentUser._id,
+      to: CurrentContact._id,
+      massege: typedMassege.trim(),
+      massegeType: 1,
+      time: Date.now(),
+      fs: 1,
+      ts: 0,
+    }
+
+    MySocket.emit("massege", CurrentUser._id, massegeObj);
 
     setTypedMassege("");
 

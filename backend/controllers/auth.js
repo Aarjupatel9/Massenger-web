@@ -46,10 +46,23 @@ async function Login(credential, req, res) {
     };
     /* res.cookies("jwt", token, cookieOptions);*/
 
-    findUser.id = findUser._id;
-    delete findUser["_id"];
+    const contact = await dbo
+      .collection("user_info")
+      .findOne({ _id: ObjectId(findUser._id) });
 
-    res.status(200).send({ status: 1, token, data:findUser });
+    const response = {
+      status: 1,
+    };
+
+    if (contact == null) {
+      response["data"] = [];
+    } else {
+      response["data"] = contact.ContactsEmails;
+    }
+
+    console.log("ContactEmails : ", response);
+    res.status(200).send({ status: 1, token, data: findUser, Contacts: contact });
+    
     return;
   } else {
     Register(credential, req, res)
@@ -77,6 +90,10 @@ async function Register(credential, req, res) {
       _id: ObjectId(result.insertedId),
       about: "hey there, i am using massenger!",
       ContactsEmails: [],
+    });
+    const result2 = await dbo.collection("masseges").insertOne({
+      _id: ObjectId(result.insertedId),
+      Contacts: [],
     });
     resolve("1");
   } else {

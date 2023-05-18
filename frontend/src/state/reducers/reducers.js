@@ -54,3 +54,11 @@ export const setMySocketInstanceReducer = (state = -1, action) => {
     return state;
   }
 };
+export const setStoredEmitEventsReducer = (state = [], action) => {
+  if (action.type == "SetStoredEmitEvents") {
+    console.log("setStoredEmitEventsReducer reducer call inside if ");
+    return action.payload;
+  } else {
+    return state;
+  }
+};
